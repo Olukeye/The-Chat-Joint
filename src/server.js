@@ -15,16 +15,28 @@ app.use(express.static(publicDirectoryPath))
 
 
 // craeting an event to the server
-let count = 0;
+// let count = 0;
+
+
+
+// when a member joined with a welcome message 
 io.on('connection', (socket) => {
   console.log('Welcome to the chat Room')
 
-  socket.emit('updatedCount', count)
+  // event to alert other users that someone has joined
+  socket.emit('message', 'Welcome!')
+  
+  // event to notify the group a new user has joined
+  socket.broadcast.emit('message', 'User joined')
 
-  socket.on('increement', () => {
-    count++
-    // socket.emit('updatedCount', count)
-    io.emit('updatedCount', count)
+  // event for form submit
+  socket.on("chat-form",(message) => {
+    io.emit('message', message)
+  })
+
+// when i user left the chat room
+  socket.on('disconnect', () => {
+    io.emit('message', 'user left!')
   })
 })
 
