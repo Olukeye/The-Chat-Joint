@@ -39,7 +39,8 @@ io.on('connection', (socket) => {
   socket.on('disconnect', () => {
     io.emit('message', 'user left!')
   })
-  // next page
+  
+  
 })
 
 
