@@ -34,14 +34,13 @@ io.on('connection', (socket) => {
     io.emit('message', message)
   })
 
+
 // when i user left the chat room
   socket.on('disconnect', () => {
     io.emit('message', 'user left!')
   })
+  // next page
 })
-
-
-
 
 
 
