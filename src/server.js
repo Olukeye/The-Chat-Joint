@@ -30,8 +30,10 @@ io.on('connection', (socket) => {
   socket.broadcast.emit('message', 'User joined')
 
   // event for form submit
-  socket.on("chat-form",(message) => {
+  socket.on("chat-form",(message, callback) => {
     io.emit('message', message)
+    // callback function for delivered messages 
+    callback('Delivered')
   })
 
 
@@ -40,7 +42,7 @@ io.on('connection', (socket) => {
     io.emit('message', 'user left!')
   })
   
-  
+
 })
 
 
