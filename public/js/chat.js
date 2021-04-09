@@ -3,11 +3,21 @@ const socket = io()
 const $form = document.querySelector('#chat-form')
 const $formInput = $form.querySelector('input')
 const $formButton = $form.querySelector('button')
+const $messages = document.querySelector('#messages')
+
+
+// this for the templates 
+const chatTemplate = document.querySelector('#chat-template').innerHTML
 
 
 socket.on('message', (message) => {
-    console.log(message);
-})
+    console.log(message)
+    const html = Mustache.render(chatTemplate, {
+        messages: message.text,
+        createdAt: moment(message.createdAt).format('h:mm a')
+    })  // this allows every chat to render in the html template
+    $messages.insertAdjacentHTML('beforeend', html)
+}) 
 
 // event for form  to listen for submit
 $form.addEventListener('submit', (e) => {
@@ -34,15 +44,3 @@ $form.addEventListener('submit', (e) => {
     })
 })
  
-
-
-// sending location of the client.
-document.querySelector('#map').addEventListener('click',() => {
-  if(!navigator.geolocation) {
-      return alert('browser not supported !!')
-  }
-
-  navigator.geolocation.getCurrentPosition((position)=> {
-      console.log(position)
-  })
-})
