@@ -9,6 +9,7 @@ const $messages = document.querySelector('#messages')
 // this for the templates 
 const chatTemplate = document.querySelector('#chat-template').innerHTML
 
+const {username, room } = Qs.parse(location.search, {ignoreQueryPrefix: true})
 
 socket.on('message', (message) => {
     console.log(message)
@@ -19,7 +20,7 @@ socket.on('message', (message) => {
     $messages.insertAdjacentHTML('beforeend', html)
 }) 
 
-// event for form  to listen for submit
+// event for form  to listen when  submitted
 $form.addEventListener('submit', (e) => {
     e.preventDefault()
     
@@ -43,4 +44,6 @@ $form.addEventListener('submit', (e) => {
 
     })
 })
+
+socket.emit('join', {username, room })
  
