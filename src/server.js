@@ -20,23 +20,24 @@ io.on('connection', (socket) => {
   console.log('Welcome to the chat Room')
 
   // to target a specific ROOM when a given user joined
-        socket.on('join', ({username, room}) => {
+        socket.on('join', ({ username, room }) => {
           socket.join(room)
-          // Welcome Messages
-        socket.emit('message', generateMessage('Welcome!'))
 
+          // Welcome Messages
+          socket.emit('message', generateMessage('Welcome!'))
+    
         // event to notify the group a new user has joined
         socket.broadcast.to(room).emit('message', generateMessage(`${username} joined`))
 
           // io.emit, socket.emit,  socket.broadcast.emit
           // io.to.emit/socket.broadcast.to.emit(it emit an event in a specific room)
-
-
-           // when i user left the chat room
-        socket.on('disconnect', () => {
-          io.to(room).emit('message', generateMessage(`${username} left`))
-       })
  
+        })
+
+
+          // when i user left the chat room
+        socket.on('disconnect', () => {
+          io.emit('message', generateMessage("left"))
         })
 
         // event for form submit
@@ -46,6 +47,12 @@ io.on('connection', (socket) => {
             // callback function for delivered messages 
             callback('Delivered')
 
+        })
+
+
+        socket.on('location', (coords, callback) => {
+          io.emit('locationMessage', `https://google.com/maps?q=${coords.latitude},${coords.longitude}`)
+          callback()
         })
 
 })

@@ -19,7 +19,9 @@
         <div class="compose">
           <form id="chat-form">
             <input id="input" placeholder="chat" />
-            <button id="button">Send</button>
+            <button id="button" id="location">Send</button>
+            <!-- you can include the location button if you wish -->
+            <!-- <button id="location">location</button> -->
           </form>
         </div>
       </div>
@@ -34,6 +36,12 @@
           {{messages}}
           <span class="message__meta" style="float:right;">{{createdAt}}</span>
         </p>
+      </div>
+    </script>
+
+    <script id="location-mgs-template" type="text/html">
+      <div>
+        <p><a href="{{url}}" target="_blank">location</a></p>
       </div>
     </script>
 
