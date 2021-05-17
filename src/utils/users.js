@@ -3,8 +3,8 @@ const users = []
 // functions we'll be creating for users information
 // addUser *
 // RemoveUser *
-// get user *
-// user in a room * 
+// getUser *
+// getting user in a room * 
 
 const addUser = ({id, username, room }) => {
     username = username.trim().toLowerCase()
@@ -39,14 +39,17 @@ const index = users.findIndex((user) => user.id === id)
     }
 }
 
-addUser({
-    id: 14,
-    username: "seun",
-    room: "ifo"
-})
+const getUser = (id) => {
+    return users.find((user) => user.id === id)
+}
 
-console.log(users)
+const getUserInRoom = (room) => {
+    return users.filter((user) => user.room === room)
+}
 
-const removedUser = removeUser(14)
-console.log(removedUser)
-console.log(users)
+module.exports = {
+    addUser,
+    removeUser,
+    getUser,
+    getUserInRoom
+}
