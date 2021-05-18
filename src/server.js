@@ -3,6 +3,7 @@ const http = require('http');
 const express = require('express');
 const socketio = require('socket.io');
 const {  generateMessage } = require('./utils/messages')
+const {addUser,removeUser,getUser,getUserInRoom} = require('./utils/users')
 
 
 const app = express()
@@ -18,27 +19,27 @@ app.use(express.static(publicDirectoryPath))
 // when a member joined with a welcome message 
 io.on('connection', (socket) => {
   console.log('Welcome to the chat Room')
-
   // to target a specific ROOM when a given user joined
-        socket.on('join', ({ username, room }) => {
-          socket.join(room)
+        socket.on('join', ( options, callback) => {
+          const {error, user} =addUser({ id: socket.id, ...options })
+
+          if(error) {
+            return callback(error)
+          }
+
+          socket.join(user.room)
+
 
           // Welcome Messages
           socket.emit('message', generateMessage('Welcome!'))
-    
         // event to notify the group a new user has joined
-        socket.broadcast.to(room).emit('message', generateMessage(`${username} joined`))
+        socket.broadcast.to(user.room).emit('message', generateMessage(`${user.username} joined`))
 
           // io.emit, socket.emit,  socket.broadcast.emit
           // io.to.emit/socket.broadcast.to.emit(it emit an event in a specific room)
- 
+
         })
 
-
-          // when i user left the chat room
-        socket.on('disconnect', () => {
-          io.emit('message', generateMessage("left"))
-        })
 
         // event for form submit
         socket.on("chat-form",(message, callback) => {
@@ -48,6 +49,17 @@ io.on('connection', (socket) => {
             callback('Delivered')
 
         })
+
+
+          // when i user left the chat room
+          socket.on('disconnect', () => {
+            const user = removeUser(socket.id)
+
+            if(user) {
+              io.to(user.room).emit('message', generateMessage(`${user.username} left`))
+            }
+          })
+  
 
 
         socket.on('location', (coords, callback) => {

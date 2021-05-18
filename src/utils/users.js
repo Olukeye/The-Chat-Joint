@@ -7,7 +7,7 @@ const users = []
 // getting user in a room * 
 
 const addUser = ({id, username, room }) => {
-    username = username.trim().toLowerCase()
+    // username = username.trim().toLowerCase()
     room = room.trim().toLowerCase()
 
     // we validate the user data
